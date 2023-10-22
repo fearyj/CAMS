@@ -1,5 +1,5 @@
 package CampSystem;
 
-public class Committee {
+public class Report {
     
 }
