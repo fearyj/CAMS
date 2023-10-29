@@ -148,14 +148,26 @@ public class CampControl {
         return camps;
     }
 
-    public ArrayList <Camp> getCamps(String group) {
-        ArrayList <Camp> result = new ArrayList <Camp> ();
-        for (Camp camp: camps) {
-            if (camp.getGroup() == group) {
-                result.add(camp);
-            }
-        }
-        return result;
+    public void filterMenu() {
+        System.out.println("Select Filter Field:");
+        System.out.println("0: Group");
+        System.out.println("1: Location");
+        System.out.println("2: Start after Specific Date");
+        System.out.println("3: End before Specific Date");
+        System.out.println("4: No Filter");
+    }
+    public void sortMenu() {
+        System.out.println("Select Sort Method:");
+        System.out.println("0: Group");
+        System.out.println("1: Location");
+        System.out.println("2: Start Date");
+        System.out.println("3: End Date");
+        System.out.println("4: Alphabetical Order (Default)");
+    }
+    public void orderMenu() {
+        System.out.println("Select Order:");
+        System.out.println("0: Ascending");
+        System.out.println("1: Descending");
     }
 
     public ArrayList <Camp> getCamps(Student student) {
@@ -167,6 +179,60 @@ public class CampControl {
         }
         return result;
     }
+    public ArrayList <Camp> filterCamps(Student student) throws ParseException {
+        ArrayList <Camp> result = new ArrayList <Camp> ();
+
+        filterMenu();
+        int option = scan.nextInt(); scan.nextLine();
+        switch (option) {
+            case 0: {
+                System.out.printf("Enter Group: ");
+                String group = scan.nextLine();
+                for (Camp camp: camps) {
+                    if (camp.getGroup().toLowerCase() == group.toLowerCase() && camp.isGroup(student.getFaculty())) {
+                        result.add(camp);
+                    }
+                }
+                break;
+            }
+            case 1: {
+                System.out.printf("Enter Location: ");
+                String location = scan.nextLine();
+                for (Camp camp: camps) {
+                    if (camp.getLocation().toLowerCase() == location.toLowerCase() && camp.isGroup(student.getFaculty())) {
+                        result.add(camp);
+                    }
+                }
+                break;
+            }
+            case 2: {
+                System.out.printf("Enter Start Date: ");
+                String startDate = scan.nextLine();
+                for (Camp camp: camps) {
+                    if (camp.getStartDate().compareTo(date(startDate)) > 0 && camp.isGroup(student.getFaculty())) {
+                        result.add(camp);
+                    }
+                }
+                break;
+            }
+            case 3: {
+                System.out.printf("Enter End Date: ");
+                String endDate = scan.nextLine();
+                for (Camp camp: camps) {
+                    if (camp.getEndDate().compareTo(date(endDate)) < 0 && camp.isGroup(student.getFaculty())) {
+                        result.add(camp);
+                    }
+                }
+                break;
+            }
+            default: {
+                result = getCamps(student);
+                break;
+            }
+        }
+
+        return result;
+    }
 
     public ArrayList <Camp> getCamps(Staff staff) {
         ArrayList <Camp> result = new ArrayList <Camp> ();
@@ -175,6 +241,60 @@ public class CampControl {
                 result.add(camp);
             }
         }
+        return result;
+    }
+    public ArrayList <Camp> filterCamps(Staff staff) throws ParseException {
+        ArrayList <Camp> result = new ArrayList <Camp> ();
+
+        filterMenu();
+        int option = scan.nextInt(); scan.nextLine();
+        switch (option) {
+            case 0: {
+                System.out.printf("Enter Group: ");
+                String group = scan.nextLine();
+                for (Camp camp: camps) {
+                    if (camp.getGroup().toLowerCase() == group.toLowerCase() && camp.isGroup(staff.getFaculty())) {
+                        result.add(camp);
+                    }
+                }
+                break;
+            }
+            case 1: {
+                System.out.printf("Enter Location: ");
+                String location = scan.nextLine();
+                for (Camp camp: camps) {
+                    if (camp.getLocation().toLowerCase() == location.toLowerCase() && camp.isGroup(staff.getFaculty())) {
+                        result.add(camp);
+                    }
+                }
+                break;
+            }
+            case 2: {
+                System.out.printf("Enter Start Date: ");
+                String startDate = scan.nextLine();
+                for (Camp camp: camps) {
+                    if (camp.getStartDate().compareTo(date(startDate)) > 0 && camp.isGroup(staff.getFaculty())) {
+                        result.add(camp);
+                    }
+                }
+                break;
+            }
+            case 3: {
+                System.out.printf("Enter End Date: ");
+                String endDate = scan.nextLine();
+                for (Camp camp: camps) {
+                    if (camp.getEndDate().compareTo(date(endDate)) < 0 && camp.isGroup(staff.getFaculty())) {
+                        result.add(camp);
+                    }
+                }
+                break;
+            }
+            default: {
+                result = getCamps(staff);
+                break;
+            }
+        }
+
         return result;
     }
 

@@ -133,7 +133,7 @@ public class Camp {
     }
 
     public Boolean isGroup(String group) {
-        if (this.group == group || group.toLowerCase().strip() == "ntu") return true;
+        if (this.group.toLowerCase() == group.toLowerCase() || group.toLowerCase().strip() == "ntu") return true;
         return false;
     }
 
