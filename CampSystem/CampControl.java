@@ -46,7 +46,28 @@ public class CampControl {
         System.out.println("8: Total Slots (Inclusive of Committee Slots)");
         System.out.println("9: Committee Slots");
     }
-    public void editCamp(int index) throws ParseException {
+    public void printCamps(ArrayList <Camp> camps) {
+        for (int i = 0; i < camps.size(); i ++) {
+            System.out.printf(i + ": ");
+            camps.get(i).printCampDetails();
+            System.out.println();
+        }
+    }
+    public void editCamp(Staff user) throws ParseException {
+        if (!(user instanceof Staff)) {
+            System.out.println("Only Staff can Edit Camps");
+            return;
+        }
+
+        ArrayList <Camp> campList = getCamps(user);
+        if (campList.size() <= 0) {
+            System.out.println("No Camps Available");
+            return;
+        }
+        printCamps(camps);
+        System.out.println("Enter Camp to Edit: ");
+        int index = scan.nextInt(); scan.nextLine();
+
         editMenu();
         int option = scan.nextInt(); scan.nextLine();
         switch (option) {
@@ -107,12 +128,20 @@ public class CampControl {
         }
     }
 
-    public void deleteCamp(int index) {
-        camps.remove(index);
-    }
+    public void deleteCamp(Staff user) {
+        if (!(user instanceof Staff)) {
+            System.out.println("Only Staff can Delete Camps");
+            return;
+        }
 
-    public Camp getCamp(int index) {
-        return camps.get(index);
+        ArrayList <Camp> campList = getCamps(user);
+        if (campList.size() <= 0) {
+            System.out.println("No Camps Available");
+            return;
+        }
+        System.out.println("Enter Camp to Delete: ");
+        int index = scan.nextInt(); scan.nextLine();
+        camps.remove(campList.get(index));
     }
 
     public ArrayList <Camp> getCamps() {
