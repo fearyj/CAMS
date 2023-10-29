@@ -19,7 +19,6 @@ public class User {
     public String getFaculty() {return faculty;}
     public void setFaculty(String faculty) {this.faculty = faculty;}
 
-    public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
 
 }
