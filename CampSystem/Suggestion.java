@@ -10,6 +10,9 @@ public class Suggestion {
 	public void printSuggestion() {
 		System.out.println(this.message);
 	}
+	public Suggestion() {
+		
+	}
 	public Student getStudent() {
 		return student;
 	}
