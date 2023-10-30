@@ -1,4 +1,4 @@
-package CampSystem;
+package camp_system.user;
 
 public class User {
     private String name, userID, password, faculty;

@@ -1,4 +1,4 @@
-package CampSystem;
+package camp_system;
 
 public class CampApp {
 

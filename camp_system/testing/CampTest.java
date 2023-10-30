@@ -1,4 +1,4 @@
-package CampSystem.Testing;
+package camp_system.testing;
 
 // import java.text.ParseException;
 // import java.util.ArrayList;

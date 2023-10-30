@@ -1,9 +1,16 @@
-package CampSystem;
+package camp_system.report;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import camp_system.camp.Camp;
 
 public class Report {
      public void participantReport (Camp camp) throws IOException
     {
-        String path = //"path to csv file";
+        String path = "path to csv file";
         File file = new File(path);
         
         try (FileWriter fw = new FileWriter(file, false);
