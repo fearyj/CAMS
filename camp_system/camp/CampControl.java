@@ -7,17 +7,26 @@ import java.util.Scanner;
 
 import camp_system.date_parser.DateParse;
 import camp_system.user.User;
+import camp_system.user.UserRole;
 
 public class CampControl {
     private ArrayList <Camp> camps = new ArrayList <Camp> ();
     public Scanner scan = new Scanner(System.in);
     public DateParse dateParse = new DateParse();
 
-    public void addTemplate(User staff) throws ParseException {
-        camps.add(new Camp("camp1", "ntu", "ntu", "camp1 in ntu!", dateParse.date("12-12-2023 10:00"), dateParse.date("15-12-2023 15:00"), dateParse.date("10-12-2023 23:59"), 100, 10, staff));
+    public void addTemplate(User user) throws ParseException {
+        if (!(user.getRole() == UserRole.Staff)) {
+            System.out.println("Only Staff can add Camps");
+            return;
+        }
+        camps.add(new Camp("camp1", "ntu", "ntu", "camp1 in ntu!", dateParse.date("12-12-2023 10:00"), dateParse.date("15-12-2023 15:00"), dateParse.date("10-12-2023 23:59"), 100, 10, user));
     }
 
-    public void addCamp(User staff) throws ParseException {
+    public void addCamp(User user) throws ParseException {
+        if (!(user.getRole() == UserRole.Staff)) {
+            System.out.println("Only Staff can add Camps");
+            return;
+        }
         System.out.println("Please enter the following details:");
         System.out.printf("Name: "); String name = scan.nextLine();
         System.out.printf("Group: "); String group = scan.nextLine();
@@ -28,7 +37,7 @@ public class CampControl {
         System.out.printf("Register By (dd-MM-yyyy HH:mm): "); Date registerBy = dateParse.date(scan.nextLine());
         System.out.printf("Total Slots (Inclusive of Committee Slots): "); int totalSlots = scan.nextInt(); scan.nextLine();
         System.out.printf("Committee Slots: "); int committeeSlots = scan.nextInt(); scan.nextLine();
-        camps.add(new Camp(name, group, location, description, startDate, endDate, registerBy, totalSlots, committeeSlots, staff));
+        camps.add(new Camp(name, group, location, description, startDate, endDate, registerBy, totalSlots, committeeSlots, user));
     }
 
     private void editMenu() {
@@ -52,7 +61,7 @@ public class CampControl {
         }
     }
     public void editCamp(User user) throws ParseException {
-        if (!(user instanceof User)) {
+        if (!(user.getRole() == UserRole.Staff)) {
             System.out.println("Only Staff can Edit Camps");
             return;
         }
@@ -127,7 +136,7 @@ public class CampControl {
     }
 
     public void deleteCamp(User user) {
-        if (!(user instanceof User)) {
+        if (!(user.getRole() == UserRole.Staff)) {
             System.out.println("Only Staff can Delete Camps");
             return;
         }
@@ -137,18 +146,31 @@ public class CampControl {
             System.out.println("No Camps Available");
             return;
         }
+
+        printCamps(campList);
         System.out.println("Enter Camp to Delete: ");
         int index = scan.nextInt(); scan.nextLine();
         camps.remove(campList.get(index));
     }
 
-    public ArrayList <Camp> getCamps() {
-        return camps;
+    public ArrayList <Camp> getAllCamps(User user) {
+        if (user.getRole() == UserRole.Staff) return camps;
+        return null;
+    }
+
+    public ArrayList <Camp> getCamps(String group) {
+        ArrayList <Camp> result = new ArrayList <Camp> ();
+        for (Camp camp: camps) {
+            if (camp.isGroup(group)) {
+                result.add(camp);
+            }
+        }
+        return result;
     }
 
     public ArrayList <Camp> getCamps(User user) {
         ArrayList <Camp> result = new ArrayList <Camp> ();
-        for (Camp camp : camps) {
+        for (Camp camp: camps) {
             if (camp.enrolledAttendee(user) || camp.enrolledCommittee(user) || camp.getStaffInCharge() == user) {
                 result.add(camp);
             }
@@ -156,18 +178,42 @@ public class CampControl {
         return result;
     }
 
-    public void registerAttendee(Camp camp, User student) {
-        camp.addAttendee(student);
-    }
-
-    public void registerCommittee(Camp camp, User student) {
-        for (Camp campItem : camps) {
-            if (campItem.enrolledCommittee(student)) return;
+    public void registerAttendee(User student) {
+        ArrayList <Camp> availableCamps = getCamps(student.getFaculty());
+        if (camps.size() <= 0) {
+            System.out.println("No Camps Available");
+            return;
         }
-        camp.addCommittee(student);
+        printCamps(availableCamps);
+        System.out.println("Enter Camp to Register as Attendee: ");
+        int index = scan.nextInt(); scan.nextLine();
+        availableCamps.get(index).addAttendee(student);
     }
 
-    public void withdrawAttendee(Camp camp, User student) {
-        camp.removeAttendee(student);
+    public void registerCommittee(User student) {
+        ArrayList <Camp> availableCamps = getCamps(student.getFaculty());
+        if (camps.size() <= 0) {
+            System.out.println("No Camps Available");
+            return;
+        }
+        for (int i = 0; i < availableCamps.size(); i ++) {
+            if (availableCamps.get(i).enrolledCommittee(student)) return;
+        }
+        printCamps(availableCamps);
+        System.out.printf("Enter Camp to Register as Attendee: ");
+        int index = scan.nextInt(); scan.nextLine();
+        availableCamps.get(index).addCommittee(student);
+    }
+
+    public void withdrawAttendee(User student) {
+        ArrayList <Camp> registeredCamps = getCamps(student);
+        if (camps.size() <= 0) {
+            System.out.println("Not Registered to any Camp");
+            return;
+        }
+        printCamps(registeredCamps);
+        System.out.printf("Enter Camp to Withdraw from as Attendee: ");
+        int index = scan.nextInt(); scan.nextLine();
+        registeredCamps.get(index).removeAttendee(student);
     }
 }

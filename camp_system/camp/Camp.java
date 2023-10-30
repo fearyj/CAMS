@@ -30,7 +30,6 @@ public class Camp extends CampInformation {
     public Boolean getActive() { return active; }
     protected void setActive(Boolean active) { this.active = active; }
 
-    // Enrollment Validity Methods
     public Boolean withinDate(Date date) {
         if (date.compareTo(getRegisterBy()) <= 0) return true;
         return false;
@@ -62,31 +61,69 @@ public class Camp extends CampInformation {
     }
 
     public ArrayList <User> getAttendeeList() { return attendeeList; }
-    public void addAttendee(User student) {
-        if (
-            vacancyAttendee() && 
-            !enrolledAttendee(student) && 
-            !enrolledCommittee(student) && 
-            !withdrawed(student) &&
-            withinDate(new Date())
-        ) attendeeList.add(student);
-    }
-    public void removeAttendee(User student) {
-        if (enrolledAttendee(student)) {
-            attendeeList.remove(student);
-            withdrawedList.add(student);
+    public void addAttendee(User user) {
+        if (!vacancyAttendee()) {
+            System.out.println("No more slots for attendees");
+            return;
         }
+        if (enrolledAttendee(user)) {
+            System.out.println("Already enrolled as an attendee");
+            return;
+        }
+        if (enrolledCommittee(user)) {
+            System.out.println("Already enrolled in the committee");
+            return;
+        }
+        if (enrolledStaff(user)) {
+            System.out.println("Already enrolled as the staff in charge");
+            return;
+        }
+        if (withdrawed(user)) {
+            System.out.println("Previously withdrawed from the camp");
+            return;
+        }
+        if (!withinDate(new Date())) {
+            System.out.println("Register date has already passed");
+            return;
+        }
+        attendeeList.add(user);
+    }
+    public void removeAttendee(User user) {
+        if (!enrolledAttendee(user)) {
+            System.out.println("Not enrolled in this camp");
+            return;
+        }
+        attendeeList.remove(user);
+        withdrawedList.add(user);
     }
 
     public ArrayList <User> getCommitteeList() { return committeeList; }
-    public void addCommittee(User student) {
-        if (
-            vacancyCommittee() && 
-            !enrolledAttendee(student) && 
-            !enrolledCommittee(student) && 
-            !withdrawed(student) &&
-            withinDate(new Date())
-        ) committeeList.add(student);
+    public void addCommittee(User user) {
+        if (!vacancyCommittee()) {
+            System.out.println("No more slots for attendees");
+            return;
+        }
+        if (enrolledAttendee(user)) {
+            System.out.println("Already enrolled as an attendee");
+            return;
+        }
+        if (enrolledCommittee(user)) {
+            System.out.println("Already enrolled in the committee");
+            return;
+        }
+        if (enrolledStaff(user)) {
+            System.out.println("Already enrolled as the staff in charge");
+            return;
+        }
+        if (withdrawed(user)) {
+            System.out.println("Previously withdrawed from the camp");
+            return;
+        }
+        if (!withinDate(new Date())) {
+            System.out.println("Register date has already passed");
+            return;
+        }
+        committeeList.add(user);
     }
 
     public Boolean isGroup(String group) {
@@ -94,9 +131,11 @@ public class Camp extends CampInformation {
         return false;
     }
 
-    public void printCampRole(User student) {
-        if (enrolledAttendee(student)) System.out.println(getName() + ": Attendee");
-        if (enrolledCommittee(student)) System.out.println(getName() + ": Committee");
+    public CampRole getCampRole(User student) {
+        if (enrolledStaff(student)) return CampRole.Staff;
+        if (enrolledAttendee(student)) return CampRole.Attendee;
+        if (enrolledCommittee(student)) return CampRole.Committee;
+        return CampRole.Not_Enrolled;
     }
 
     public void printCampDetails() {
