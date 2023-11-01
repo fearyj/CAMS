@@ -20,5 +20,5 @@ public class User {
     public void setFaculty(String faculty) {this.faculty = faculty;}
 
     public void setPassword(String password) {this.password = password;}
-
+    public String getPassword() {return password;}
 }
