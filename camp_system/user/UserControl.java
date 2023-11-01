@@ -61,7 +61,7 @@ public class UserControl {
         return null;
     }
     //test
-    public void printUserList() {
+    /*public void printUserList() {
         for (User user : users) {
             System.out.println("Name: " + user.getName());
             System.out.println("Email: " + user.getUserID());
@@ -96,7 +96,7 @@ public class UserControl {
         } else {
             System.out.println("Login failed for user with ID: " + invalidUserID);
         }
-    }
+    }*/
 }
     
 
