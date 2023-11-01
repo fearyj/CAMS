@@ -17,15 +17,23 @@ public class UserControl {
     public void readExcel(String csvFilePath) {
     try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
         String line;
+        Role role = Role.STUDENT;
+            if (csvFilePath.contains("students.csv")) {
+                role = Role.STUDENT;
+            } else if (csvFilePath.contains("staffs.csv")) {
+                role = Role.STAFF;
+            }
         while ((line = reader.readLine()) != null) {
             String[] values = line.split(",");
             if (values.length >= 3) {
                 String name = values[0];
                 String email = values[1];
-                String faculty = values[2];
+                String facultyStr = values[2]; // Read faculty as a string
+                Faculty faculty = Faculty.fromString(facultyStr); // Convert the string to the Faculty enum
                 String userID = email.split("@")[0]; // Extract the user ID from the email
+                
 
-                User user = new User(name, userID, "password", faculty); // Create a User object with a default password
+                User user = new User(name, userID, "password", faculty, role); // Create a User object with a default password 
                 users.add(user);
             } else {
                 System.err.println("Error: CSV line does not have enough values: " + line);
@@ -52,22 +60,23 @@ public class UserControl {
         // If the user ID and password do not match, return null.
         return null;
     }
+    //test
     public void printUserList() {
         for (User user : users) {
             System.out.println("Name: " + user.getName());
             System.out.println("Email: " + user.getUserID());
             System.out.println("Faculty: " + user.getFaculty());
             System.out.println("Password: " + user.getPassword());
+            System.out.println("Role: " + user.getRole());
             System.out.println();
         }
     }
     public static void main(String[] args) {
-        UserControl userControl = new UserControl("C:\\Users\\qzq99\\OneDrive\\Documents\\GitHub\\CAMS\\staffs.csv");
-        userControl.readExcel("C:\\Users\\qzq99\\OneDrive\\Documents\\GitHub\\CAMS\\staffs.csv");
+        UserControl userControl = new UserControl("C:\\Users\\qzq99\\OneDrive\\Documents\\GitHub\\CAMS\\students.csv");
         userControl.printUserList();
 
         // Test case 1: A valid login
-        String validUserID = "ARVI";
+        String validUserID = "YCN019";
         String validPassword = "password";
         User validUser = userControl.login(validUserID, validPassword);
 
