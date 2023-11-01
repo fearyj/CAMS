@@ -2,17 +2,19 @@ package camp_system.camp;
 
 import java.util.Date;
 
+import camp_system.user.Faculty;
 import camp_system.user.User;
 
 public class CampInformation {
-    private String name, group, location, description;
+    private String name, location, description;
     private Date startDate, endDate, registerBy;
     private int totalSlots, committeeSlots;
     private User staffInCharge;
+    Faculty group;
     
     public CampInformation(
         String name,
-        String group,
+        Faculty group,
         String location,
         String description,
         Date startDate,
@@ -46,8 +48,8 @@ public class CampInformation {
     public Date getRegisterBy() { return registerBy; }
     protected void setRegisterBy(Date registerBy) { this.registerBy = registerBy; }
 
-    public String getGroup() { return group; }
-    protected void setGroup(String group) { this.group = group; }
+    public Faculty getGroup() { return group; }
+    protected void setGroup(Faculty group) { this.group = group; }
 
     public String getLocation() { return location; }
     protected void setLocation(String location) { this.location = location; }

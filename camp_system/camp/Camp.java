@@ -3,6 +3,7 @@ package camp_system.camp;
 import java.util.ArrayList;
 import java.util.Date;
 
+import camp_system.user.Faculty;
 import camp_system.user.User;
 
 public class Camp extends CampInformation {
@@ -10,7 +11,7 @@ public class Camp extends CampInformation {
     private ArrayList <User> attendeeList, committeeList, withdrawedList;
 
     public Camp(
-        String name, String group, String location, String description,
+        String name, Faculty group, String location, String description,
         Date startDate, Date endDate, Date registerBy,
         int totalSlots, int committeeSlots,
         User staffInCharge
@@ -126,8 +127,8 @@ public class Camp extends CampInformation {
         committeeList.add(user);
     }
 
-    public Boolean isGroup(String group) {
-        if (getGroup().toLowerCase() == group.toLowerCase() || group.toLowerCase().strip() == "ntu") return true;
+    public Boolean isGroup(Faculty group) {
+        if (getGroup() == group || group == Faculty.NTU) return true;
         return false;
     }
 
