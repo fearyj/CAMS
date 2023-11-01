@@ -128,7 +128,7 @@ public class Camp extends CampInformation {
     }
 
     public Boolean isGroup(Faculty group) {
-        if (getGroup() == group || group == Faculty.NTU) return true;
+        if (getGroup() == group || getGroup() == Faculty.NTU) return true;
         return false;
     }
 
